@@ -7,8 +7,8 @@
 #+options: html5-fancy:nil tex:t toc:nil
 
 #+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
-#+options: author:nil broken-links:nil c:nil creator:nil
-#+options: d:(not "LOGBOOK") date:nil e:t email:nil f:t inline:t num:t
+#+options: author:t broken-links:nil c:t creator:nil
+#+options: d:(not "LOGBOOK") date:nil e:t email:t f:t inline:t num:t
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
 #+options: timestamp:nil title:t toc:nil todo:nil |:t
 
@@ -18,8 +18,9 @@
 #+subtitle: Embedded Systems
 #+date: <2020-12-06 Sun>
 #+author: Sandy Urazayev
-#+email: thecsw@Mania.local
+#+email: ctu@ku.edu
 #+language: en
+
 * Anti-collision Blinker Car
 by *Jonelle Gamble* and *Abdoul Diallo*
 
@@ -84,5 +85,5 @@ by *Jonelle Gamble* and *Abdoul Diallo*
    #+attr_html: :width 45% :align left
    [[./anticol_1.jpg]]
 
-   #+attr_html: :width 45% :align right
+   #+attr_html: :width 45% :align center
    [[./anticol_2.jpg]]
