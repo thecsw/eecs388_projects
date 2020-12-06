@@ -1,0 +1,88 @@
+
+#+html_doctype: xhtml-strict
+#+html_container: div
+#+html_head: <link rel="stylesheet" href="https://sandyuraz.com/styles/org.min.css">
+#+options: html-link-use-abs-url:nil html-postamble:auto
+#+options: html-preamble:t html-scripts:t html-style:t
+#+options: html5-fancy:nil tex:t toc:nil
+
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:nil broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:nil e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:nil title:nil toc:nil todo:nil |:t
+
+#+description:
+#+keywords:
+#+title: Selected Final Projects
+#+subtitle: Embedded Systems
+#+date: <2020-12-06 Sun>
+#+author: Sandy Urazayev
+#+email: thecsw@Mania.local
+#+language: en
+* Anti-collision Blinker Car
+by *Jonelle Gamble* and *Abdoul Diallo*
+
+** Motivation
+   One of the main motivations while doing this lab was to put our
+   knowledge of programming into practice. We learned some C programming
+   during lectures, that added to prior knowledge of C++, and it was a
+   fun project to work on. We were able to see our code’s effects not
+   only through monitors but making an object move/stop (the
+   car). Another thing is that we learned a lot while doing this project,
+   because we had to deal with many areas, we had not been exposed to
+   prior to taking this class.
+   
+** Design
+   We initially thought, for the reverse function of the car, we only
+   had to set the speed to reverse to get it to work properly. For the
+   anti-collision, our initial thoughts were to write code similar to
+   lab 3 that gets information form the lidar sensor. However, instead
+   of changing the light on the HiFive Board, we would call the stop
+   car function when an object is detected 75cm away. Lastly, our
+   initial thoughts for blinker lights were to put together what we
+   learned in lab 4 and 5 where we blinked lights different colors and
+   used interrupts. We also knew that we would need an if statement to
+   check whether the steering was turning right or left (-45 to 0 or 0
+   to 45 degrees) and change the color of the light accordingly. 
+
+** Implementation
+   We changed the reverse function to match the graph that was shown
+   by the TAs, because the reverse option of the cars are locked when
+   they go forward. We implemented something called a double click to
+   decrease the speed of the car slowly to the reverse, then back to
+   neutral, before setting it slowly to the reverse speed again. The
+   hardship encountered while testing the reverse function is that the
+   cars needed to be calibrated at start. The last speed run by car
+   before it turns off is set as the neutral on the next start. As for
+   the Lidar, our initial thoughts were correct. However, we spent
+   some time trying to set up the UARTS on the HiFive, since one was
+   used by the Pi already. The pins were also inverted on the board
+   for the connections. Moreover, the delays in the main function made
+   it so the Lidar was sending information later than it should for
+   the car to stop at the right moment. The blinker also complained
+   because of delays and the position of the code for the interrupts
+   inside the main function mattered. We made it work by updating a
+   variable which handled the led index to turn on according to the
+   degree of the steering angle. We also had to remove and put back
+   the code for a version specification in the Pi, because the
+   Raspberry Pis have different software versions. We wanted to
+   implement a remote controller with Bluetooth, but we couldn’t get a
+   controller.  
+
+** Results
+   Our code worked when we showed it to TAs during lab, however, when
+   demoing it we had to change the code to make the camera work,
+   because we were given a car with a different OS version for the
+   Pi. We also needed to add delays in so that the TAs could calibrate
+   the car before it starts running. For the results of our demo,
+   everything worked correctly except our blinkers were not blinking
+   at the correct rate/frequency. We think that this project was a lot
+   more challenging compared to the previous labs, however, it was
+   very rewarding due to the knowledge we gained.
+
+   #+attr_html: :width 45% :align left
+   [[./anticol_1.jpg]]
+
+   #+attr_html: :width 45% :align right
+   [[./anticol_2.jpg]]
