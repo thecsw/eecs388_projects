@@ -193,6 +193,73 @@
   /*]]>*/-->
 </style>
 <link rel="stylesheet" href="https://sandyuraz.com/styles/org.min.css">
+
+        <style>
+        /* From: https://endlessparentheses.com/public/css/endless.css */
+        /* See also: https://meta.superuser.com/questions/4788/css-for-the-new-kbd-style */
+        kbd
+        {
+          -moz-border-radius: 6px;
+          -moz-box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+          -webkit-border-radius: 6px;
+          -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+          background-color: #f7f7f7;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          box-shadow: 0 1px 0 rgba(0,0,0,0.2),0 0 0 2px #fff inset;
+          color: #333;
+          display: inline-block;
+          font-family: 'Droid Sans Mono', monospace;
+          font-size: 80%;
+          font-weight: normal;
+          line-height: inherit;
+          margin: 0 .1em;
+          padding: .08em .4em;
+          text-shadow: 0 1px 0 #fff;
+          word-spacing: -4px;
+        
+          box-shadow: 2px 2px 2px #222; /* MA: An extra I've added. */
+        }
+        </style>
+        <link rel="stylesheet" type="text/css" href="https://alhassy.github.io/org-special-block-extras/tooltipster/dist/css/tooltipster.bundle.min.css"/>
+        
+        <link rel="stylesheet" type="text/css" href="https://alhassy.github.io/org-special-block-extras/tooltipster/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-punk.min.css" />
+        
+        <script type="text/javascript">
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape('%3Cscript src="https://code.jquery.com/jquery-1.10.0.min.js"%3E%3C/script%3E'));
+            }
+        </script>
+        
+         <script type="text/javascript"            src="https://alhassy.github.io/org-special-block-extras/tooltipster/dist/js/tooltipster.bundle.min.js"></script>
+        
+          <script>
+                 $(document).ready(function() {
+                     $('.tooltip').tooltipster({
+                         theme: 'tooltipster-punk',
+                         contentAsHTML: true,
+                         animation: 'grow',
+                         delay: [100,500],
+                         // trigger: 'click'
+                         trigger: 'custom',
+                         triggerOpen: {
+                             mouseenter: true
+                         },
+                         triggerClose: {
+                             originClick: true,
+                             scroll: true
+                         }
+         });
+                 });
+             </script>
+        
+        <style>
+           abbr {color: red;}
+        
+           .tooltip { border-bottom: 1px dotted #000;
+                      color:red;
+                      text-decoration: none;}
+        </style>
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -246,18 +313,224 @@ for the JavaScript code in this tag.
 <br />
 <span class="subtitle">Embedded Systems</span>
 </h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org59ae92a">1. Web Server Car by Embedheads</a></li>
+<li><a href="#orgf84c9a6">2. Bluetooth-Controlled Car by Big Dogs</a></li>
+<li><a href="#org2d7d5bd">3. Reversing Anti-collision Blinker Car by Black Box</a></li>
+<li><a href="#orgb30999b">4. Self-Guided Car with a memory by Jeng-Atkins</a></li>
+</ul>
+</div>
+</div>
 
-<div id="outline-container-org82fb57b" class="outline-2">
-<h2 id="org82fb57b"><span class="section-number-2">1</span> Anti-collision Blinker Car</h2>
+<div id="outline-container-org59ae92a" class="outline-2">
+<h2 id="org59ae92a"><span class="section-number-2">1</span> Web Server Car by Embedheads</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-by <b>Jonelle Gamble</b> and <b>Abdoul Diallo</b>
+<b>Sandy Urazayev</b> and <b>KayLee Mitchell</b>
 </p>
 </div>
 
-<div id="outline-container-orgf50a351" class="outline-3">
-<h3 id="orgf50a351"><span class="section-number-3">1.1</span> Motivation</h3>
+<ol class="org-ol">
+<li><a id="org2218ffe"></a>Motivation<br />
 <div class="outline-text-3" id="text-1-1">
+<p>
+After completing the standard milestones, Kaylee and I were out for blood. We
+wished to do something fun and daring. A way to combine the past and the
+future into a single project; let it breathe a little. We came to an idea of
+writing our car in C/Assembly and making the controls with HTML/Python.
+</p>
+</div>
+</li>
+
+<li><a id="org95ee91e"></a>Design<br />
+<div class="outline-text-3" id="text-1-2">
+<p>
+The design is incredibly simple. We utilize the basic motor control functions
+written in C that we used in milestones 1-3; we add a couple more functions,
+such as <code>reverse</code>, <code>steering</code>, and <code>angle</code>. And we would need a webserver that
+listens to any incoming HTTP connections to send commands through the serial
+to our motor controller. Finally, some simple HTML page to make the web
+server endpoints call more bearable. The design schematic would look like:
+</p>
+
+<pre class="example">
+  -------      +------------+  	 +-----------+
+ (  user )-----+ HTML Page  +----+ Web Server|
+  -------      +------------+  	 +-----+-----+
+				       |
+			   Serial ---&gt; |
+				       |
+ -------      +----------------+   +---+----+
+( Metal )-----+     Motor      +---+ HiFive |
+ -------      |   Controller   |   +--------+
+	      +----------------+
+</pre>
+</div>
+</li>
+
+<li><a id="org18c78db"></a>Implementation<br />
+<div class="outline-text-3" id="text-1-3">
+<p>
+In a project like this, where the programs to full-stack and beyond,
+everything that can go wrong, <b>will</b> go wrong. Fortunately, nothing went too
+wrong. Our design schema above proved to be the best design choice we could
+pursue. The hardships we encountered were due to linux permission management
+and university network connections limitations. 
+</p>
+
+<p>
+For example, the local network didn't allow us to allocate LAN. We used our
+own router, where we would connect the raspberry pi on the car and any other
+browser-capable device that wants to control the motor. 
+</p>
+
+<p>
+Let us show an example of a web browser call. Any device can connect to the
+HTTP server of the car and using query parameters (or body parameters) send
+the values that have to will relay to the motor controller.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #bd93f9;">@app.route</span>(<span style="color: #f1fa8c;">"/kaylee"</span>)
+<span style="color: #ff79c6; font-weight: bold;">def</span> <span style="color: #50fa7b; font-weight: bold;">sandy</span>():
+    <span style="color: #f8f8f2; font-weight: bold;">angle</span> = request.args.get(<span style="color: #f1fa8c;">"angle"</span>)
+    <span style="color: #f8f8f2; font-weight: bold;">speed</span> = request.args.get(<span style="color: #f1fa8c;">"speed"</span>)
+    <span style="color: #ff79c6; font-weight: bold;">if</span> angle <span style="color: #ff79c6; font-weight: bold;">is</span> <span style="color: #8be9fd;">None</span> <span style="color: #ff79c6; font-weight: bold;">or</span> speed <span style="color: #ff79c6; font-weight: bold;">is</span> <span style="color: #8be9fd;">None</span>:
+        <span style="color: #ff79c6; font-weight: bold;">return</span> <span style="color: #f1fa8c;">"You're trash"</span>
+    ser1.write(<span style="color: #ffb86c;">bytes</span>(<span style="color: #f1fa8c;">"angle"</span> + <span style="color: #ffb86c;">str</span>(<span style="color: #ffb86c;">int</span>(angle)) + <span style="color: #f1fa8c;">"\n"</span>))
+    ser1.write(<span style="color: #ffb86c;">bytes</span>(<span style="color: #f1fa8c;">"speed"</span> + <span style="color: #ffb86c;">str</span>(<span style="color: #ffb86c;">int</span>(speed)) + <span style="color: #f1fa8c;">"\n"</span>))
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="orgd914ccf"></a>Results<br />
+<div class="outline-text-3" id="text-1-4">
+<p>
+The end product was an astounding success! We had a simple HTML interface to
+increase car's speed by certain increment; turn car's wheels left and right
+by some other increment value. The response feeling was astonding. Delay was
+small thanks to our straight-forward design and proper memory management. Any
+user with a laptop, phone, or a tablet could connect to our network and
+control the car just the way they like!
+</p>
+
+
+<div class="figure">
+<p><img src="./embedheads_1.jpg" alt="embedheads_1.jpg" width="45%" align="left" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./embedheads_2.jpg" alt="embedheads_2.jpg" width="45%" align="center" />
+</p>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+
+<div id="outline-container-orgf84c9a6" class="outline-2">
+<h2 id="orgf84c9a6"><span class="section-number-2">2</span> Bluetooth-Controlled Car by Big Dogs</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+<b>Connor Sutton</b> and <b>Aidan Schmelzle</b>
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org7b83f38"></a>Motivation<br />
+<div class="outline-text-3" id="text-2-1">
+<p>
+We felt that adding a method of manually maneuvering our car would be a great
+way to elevate our project, and it was something that would be a lot of fun
+to play around with. For many, remote-controlled cars are a source of
+childhood nostalgia, and to implement that functionality ourselves was a very
+exciting idea. We also felt that we had all the means and resources necessary
+to accomplish the task.
+</p>
+</div>
+</li>
+
+<li><a id="org6b1f8ee"></a>Design<br />
+<div class="outline-text-3" id="text-2-2">
+<p>
+At first, the implementation seemed like it would be quite trivial. In the base
+project, the Raspberry PI sends information from the neural network to the
+Hi-five board through the UART, and this information is interpreted to
+manipulate the motors that control the car’s movement. All we had to do was
+write a python file that sends information to the UART in the same way, except
+that the source of this information would be inputs from the controller rather
+than the output of the neural network. The most daunting task was to set up the
+Bluetooth connection between the controller and the Raspberry Pi.
+</p>
+</div>
+</li>
+
+<li><a id="org472233d"></a>Implementation<br />
+<div class="outline-text-3" id="text-2-3">
+<p>
+At first, our implementation went according to plan. We encountered some
+major, unexpected hardships, however, when we were trying to use the
+information received by the HiFive to actually manipulate the motors. We
+could get the steering angle to change correctly, but trying to change the
+speed of the car resulted in all sorts of weird, seemingly inexplicable
+errors, and the more we tried to fix it, the weirder our issues became. In
+trying to solve our problem, others arose, and soon even the steering stopped
+working. When it was our turn to demo, we were essentially back at square one
+and in trouble.
+</p>
+</div>
+</li>
+
+<li><a id="org5439140"></a>Results<br />
+<div class="outline-text-3" id="text-2-4">
+<p>
+In a miraculous display of dedication and willpower, Aidan solved the
+mysterious issues preventing our car from operating, and we were able to
+successfully demo our project. We learned a lot about working with hardware
+and bare-metal programming through this project. It also reinforced the fact
+that implementation of an idea is hardly ever as simple as it sounds, but in
+the end, the difficulty increases our understanding and heightens the sense
+of reward and accomplishment.
+</p>
+
+<p>
+Enjoy some videos from the demo day! <a href="./bluetooth_3.MOV">Video 1</a> <a href="./bluetooth_4.MOV">Video 2</a> <a href="./bluetooth_5.MOV">Video 3</a>
+</p>
+
+
+<div class="figure">
+<p><img src="./bluetooth_1.jpg" alt="bluetooth_1.jpg" width="45%" align="left" />
+</p>
+</div>
+
+
+<div class="figure">
+<p><img src="./bluetooth_2.jpg" alt="bluetooth_2.jpg" width="45%" align="center" />
+</p>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-org2d7d5bd" class="outline-2">
+<h2 id="org2d7d5bd"><span class="section-number-2">3</span> Reversing Anti-collision Blinker Car by Black Box</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<b>Jonelle Gamble</b> and <b>Abdoul Diallo</b>
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org4127f38"></a>Motivation<br />
+<div class="outline-text-3" id="text-3-1">
 <p>
 One of the main motivations while doing this lab was to put our
 knowledge of programming into practice. We learned some C programming
@@ -269,11 +542,10 @@ because we had to deal with many areas, we had not been exposed to
 prior to taking this class.
 </p>
 </div>
-</div>
+</li>
 
-<div id="outline-container-org9fedacf" class="outline-3">
-<h3 id="org9fedacf"><span class="section-number-3">1.2</span> Design</h3>
-<div class="outline-text-3" id="text-1-2">
+<li><a id="orgc5eac22"></a>Design<br />
+<div class="outline-text-3" id="text-3-2">
 <p>
 We initially thought, for the reverse function of the car, we only
 had to set the speed to reverse to get it to work properly. For the
@@ -285,14 +557,13 @@ initial thoughts for blinker lights were to put together what we
 learned in lab 4 and 5 where we blinked lights different colors and
 used interrupts. We also knew that we would need an if statement to
 check whether the steering was turning right or left (-45 to 0 or 0
-to 45 degrees) and change the color of the light accordingly. 
+to 45 degrees) and change the color of the light accordingly.
 </p>
 </div>
-</div>
+</li>
 
-<div id="outline-container-org96376ec" class="outline-3">
-<h3 id="org96376ec"><span class="section-number-3">1.3</span> Implementation</h3>
-<div class="outline-text-3" id="text-1-3">
+<li><a id="org6d485fd"></a>Implementation<br />
+<div class="outline-text-3" id="text-3-3">
 <p>
 We changed the reverse function to match the graph that was shown
 by the TAs, because the reverse option of the cars are locked when
@@ -315,14 +586,13 @@ degree of the steering angle. We also had to remove and put back
 the code for a version specification in the Pi, because the
 Raspberry Pis have different software versions. We wanted to
 implement a remote controller with Bluetooth, but we couldn’t get a
-controller.  
+controller.
 </p>
 </div>
-</div>
+</li>
 
-<div id="outline-container-orgb93c0ef" class="outline-3">
-<h3 id="orgb93c0ef"><span class="section-number-3">1.4</span> Results</h3>
-<div class="outline-text-3" id="text-1-4">
+<li><a id="orgdb8063a"></a>Results<br />
+<div class="outline-text-3" id="text-3-4">
 <p>
 Our code worked when we showed it to TAs during lab, however, when
 demoing it we had to change the code to make the camera work,
@@ -347,7 +617,89 @@ very rewarding due to the knowledge we gained.
 </p>
 </div>
 </div>
+</li>
+</ol>
 </div>
+
+
+<div id="outline-container-orgb30999b" class="outline-2">
+<h2 id="orgb30999b"><span class="section-number-2">4</span> Self-Guided Car with a memory by Jeng-Atkins</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<b>Joshua Jeng</b> and <b>Thomas Atkins</b>
+</p>
+</div>
+
+<ol class="org-ol">
+<li><a id="org4ad433f"></a>Motivation<br />
+<div class="outline-text-3" id="text-4-1">
+<p>
+Having implemented Milestones 1-3 in a relatively streamlined fashion, we
+were each looking for a challenge for Milestone 4. We each took a task and
+implemented it, with Thomas taking the course mapping and Joshua trying to
+implement the collision avoidance task.
+</p>
+</div>
+</li>
+
+<li><a id="orgcd91a9f"></a>Design<br />
+<div class="outline-text-3" id="text-4-2">
+<p>
+In Lab 3, we had implemented range detection using a LIDAR sensor connected
+to a Hifive board through UART 0. Thus, it seemed simple to transfer that
+code over and modify it to use UART 1 and stop the motor when within range of
+an obstacle. For the course mapping portion we planned on just creating a log
+in memory of what was being sent to the car and then writing it to a file to
+be read later.
+</p>
+</div>
+</li>
+
+<li><a id="orgd4a3837"></a>Implementation<br />
+<div class="outline-text-3" id="text-4-3">
+<p>
+For the LIDAR, initially, it seemed that the implementation process would be
+as simple as copying the code from Lab 3 into the project, and modify it to
+use UART 1 rather than UART 0, as was used back then. However, this ended up
+proving extremely challenging. Debugging showed that the code worked when
+using UART 0, hinting that the problem lay deeper than our code. From there,
+switching boards, double-checking the Hifive pinouts, and so forth yielded no
+insight into the ultimate cause of the issue.
+</p>
+
+<p>
+The course mapping implication unutilized two different files for the mapping of
+the course and the repeating the course. This was done to avoid the hassle of
+having two have a command line switch and two different branches in the main
+loop. In the writing we simply left the script mostly the same and only added a
+few time checks and logged the info. The log file consisted of the angle that
+was sent to the car and time information about when it started to go at that
+angle and then when it switched to a new angle. The reading file required more
+work to get up and running as it required rewriting most of the main loop to
+check the values in the log file instead of inference from the camera.
+</p>
+</div>
+</li>
+
+<li><a id="org38e9586"></a>Results<br />
+<div class="outline-text-3" id="text-4-4">
+<p>
+The main demonstration on the track was apparently very successful. While the
+actual self-driving was rather suspect, the car did attempt to make the
+correct adjustments based on the camera input. Due to the aforementioned
+issues with the LIDAR, the collision avoidance extra credit was never
+tested. The course mapping aspect of milestone 4 was successful. We were able
+to replicate the angel sent to the HiFive board during our demonstration.
+</p>
+
+
+<div class="figure">
+<p><img src="./jengatkins_1.jpg" alt="jengatkins_1.jpg" width="45%" align="center" />
+</p>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div id="postamble" class="status">
