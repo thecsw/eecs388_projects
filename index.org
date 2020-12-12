@@ -25,7 +25,7 @@
   *Sandy Urazayev* and *KayLee Mitchell*
 
 ** Motivation
-   After completing the standard milestones, Kaylee and I were out for blood. We
+   After completing the standard milestones, KayLee and I were out for blood. We
    wished to do something fun and daring. A way to combine the past and the
    future into a single project; let it breathe a little. We came to an idea of
    writing our car in C/Assembly and making the controls with HTML/Python.
@@ -140,6 +140,7 @@
 
    #+attr_html: :width 45% :align center
    [[./bluetooth_2.jpg]]
+
 
 * Reversing Anti-collision Blinker Car by Black Box
   *Jonelle Gamble* and *Abdoul Diallo*
